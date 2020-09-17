@@ -1,45 +1,36 @@
-﻿using UnityEngine;
-using UnityEngine.UI; //add this when referencing UI elements
-using System.Collections;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-
-    public float speed;
-    public int score = 0;
+    public float speed = 0;
 
     private Rigidbody rb;
 
-    public Text scoreUI;
-    public Text winUI;
+    private float movementX;
+    private float movementY;
 
+    // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
     }
 
-    void FixedUpdate()
+    private void OnMove(InputValue movementValue)
     {
-        float moveHorizontal = Input.GetAxis("Horizontal");
-        float moveVertical = Input.GetAxis("Vertical");
+        Vector2 movementVector = movementValue.Get<Vector2>();
 
-        Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
-
-        rb.AddForce(movement * speed);
+        movementX = movementVector.x;
+        movementY = movementVector.y;
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void FixedUpdate()
     {
-        Debug.Log("got a point");
-        score++;
-        other.gameObject.SetActive(false);
-        scoreUI.text = "Score: " + score;
+        Vector3 movement = new Vector3(movementX, 0.0f, movementY);
 
-        if (score == 7)
-        {
-            //activate the win text
-            winUI.enabled = true;
-        }
+        rb.AddForce(movement * speed);
     }
 
 }
