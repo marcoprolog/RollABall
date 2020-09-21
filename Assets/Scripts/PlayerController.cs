@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -11,6 +12,10 @@ public class PlayerController : MonoBehaviour
 
     private float movementX;
     private float movementY;
+
+    public int score = 0;
+
+    public Text scoreText;
 
     // Start is called before the first frame update
     void Start()
@@ -33,4 +38,13 @@ public class PlayerController : MonoBehaviour
         rb.AddForce(movement * speed);
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        // executed when the player collides with some trigger that has the collider "other"
+        score++;
+        Destroy(other.gameObject);
+
+        // update the ui
+        scoreText.text = "Score: " + score;
+    }
 }
